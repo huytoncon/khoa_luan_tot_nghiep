@@ -1,0 +1,2501 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>So sánh giá điện thoại - Tìm sản phẩm tốt nhất</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+            line-height: 1.6;
+        }
+
+        .main-layout {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .sidebar {
+            flex: 0 0 350px;
+            position: sticky;
+            top: 20px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #d2d2d7 transparent;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: #d2d2d7;
+            border-radius: 10px;
+        }
+
+        .content {
+            flex: 1;
+        }
+
+        @media (max-width: 1024px) {
+            .main-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                flex: none;
+                width: 100%;
+                position: static;
+                max-height: none;
+            }
+        }
+
+
+        header {
+            background: linear-gradient(135deg, #007aff 0%, #5856d6 100%);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .filters {
+            background-color: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            min-width: 180px;
+        }
+
+        .filter-label {
+            font-size: 14px;
+            color: #86868b;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        select,
+        input {
+            padding: 10px 15px;
+            border: 1px solid #d2d2d7;
+            border-radius: 10px;
+            font-size: 15px;
+            background-color: white;
+        }
+
+        .search-box {
+            flex: 2;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding-left: 40px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2386868b' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: 12px center;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            height: 220px;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .product-image img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .source-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .product-info {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .product-price {
+            font-size: 22px;
+            font-weight: 700;
+            color: #e60012;
+            margin-bottom: 15px;
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+            font-size: 13px;
+            color: #515154;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: #007aff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0051d5;
+        }
+
+        .btn-secondary {
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+            border: 1px solid #d2d2d7;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e8e8ed;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+            color: #86868b;
+            grid-column: 1 / -1;
+        }
+
+        /* Infinite Scroll Loader */
+        #scroll-sentinel {
+            grid-column: 1 / -1;
+            height: 1px;
+        }
+
+        .load-more-spinner {
+            display: none;
+            text-align: center;
+            padding: 30px 20px;
+            color: #86868b;
+            font-size: 15px;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .load-more-spinner.visible {
+            display: flex;
+        }
+
+        .load-more-spinner i {
+            font-size: 20px;
+            color: #007aff;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #d2d2d7;
+            border-top-color: #007aff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .products-count-label {
+            text-align: center;
+            color: #86868b;
+            font-size: 13px;
+            padding: 10px 0 30px;
+            display: none;
+        }
+
+        .products-count-label.visible {
+            display: block;
+        }
+
+        .stars {
+            color: #ffb800;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .error-message {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .filter-group,
+            .search-box {
+                width: 100%;
+            }
+
+            .chat-window {
+                width: 300px;
+                bottom: 70px;
+                right: 10px;
+            }
+        }
+
+        /* Chatbot Widget Styles */
+        .chat-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .chat-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #007aff 0%, #0056b3 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 50, 150, 0.3);
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .chat-button:hover {
+            transform: scale(1.12);
+        }
+
+        .chat-button::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid rgba(99,102,241,0.45);
+            animation: pulse-ring 2.2s ease-out infinite;
+        }
+
+        @keyframes pulse-ring {
+            0%   { transform: scale(1); opacity: 0.7; }
+            70%  { transform: scale(1.35); opacity: 0; }
+            100% { opacity: 0; }
+        }
+
+        .chat-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 380px;
+            height: 550px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideIn 0.3s ease;
+            border: 1px solid #f0f0f0;
+            transition: width 0.3s ease, height 0.3s ease, border-radius 0.3s ease;
+        }
+
+        .chat-window.active {
+            display: flex;
+        }
+
+        /* Expanded state */
+        .chat-window.expanded {
+            position: fixed;
+            bottom: 50%;
+            right: 50%;
+            transform: translate(50%, 50%);
+            width: min(780px, 90vw);
+            height: min(680px, 88vh);
+            border-radius: 20px;
+            animation: none;
+        }
+
+        .chat-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 9998;
+            backdrop-filter: blur(2px);
+        }
+
+        .chat-overlay.active { display: block; }
+
+        @media (max-width: 600px) {
+            .chat-window.expanded {
+                width: 100vw;
+                height: 100dvh;
+                bottom: 0; right: 0;
+                transform: none;
+                border-radius: 0;
+            }
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #007aff 0%, #0051d5 100%);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #f5f5f7;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.5;
+            word-wrap: break-word;
+            position: relative;
+        }
+
+        .bot-message {
+            background: white;
+            color: #1d1d1f;
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            align-self: flex-start;
+        }
+
+        .user-message {
+            background: #007aff;
+            color: white;
+            border-bottom-right-radius: 5px;
+            align-self: flex-end;
+            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.2);
+        }
+
+        .chat-input-area {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            display: flex;
+            background: white;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 25px;
+            outline: none;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .chat-input:focus {
+            border-color: #007aff;
+        }
+
+        .send-btn {
+            background: #007aff;
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .send-btn:hover {
+            background: #0056b3;
+        }
+
+        .chat-suggestions {
+            display: flex;
+            gap: 8px;
+            padding: 0 20px 15px;
+            flex-wrap: wrap;
+            background: #f5f5f7;
+        }
+
+        .suggestion-chip {
+            background: white;
+            border: 1px solid #dcdce0;
+            color: #1d1d1f;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .suggestion-chip:hover {
+            background: #007aff;
+            color: white;
+            border-color: #007aff;
+        }
+
+        /* Mini Product in Chat */
+        .chat-product {
+            display: flex;
+            background: #fbfbfd;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 10px;
+            margin-top: 10px;
+            text-decoration: none;
+            color: inherit;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .chat-product:hover {
+            background: #f0f0f2;
+        }
+
+        .chat-product img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            margin-right: 10px;
+            background: white;
+            border-radius: 8px;
+            padding: 2px;
+        }
+
+        .chat-product-info {
+            flex: 1;
+        }
+
+        .chat-product-name {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 2px;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .chat-product-price {
+            color: #007aff;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        /* Markdown formatting inside bot messages */
+        .bot-message h2 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0051d5;
+            margin: 10px 0 5px 0;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #e0eaff;
+        }
+        .bot-message h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin: 8px 0 3px 0;
+        }
+        .bot-message p {
+            margin: 4px 0;
+            line-height: 1.6;
+        }
+        .bot-message ul, .bot-message ol {
+            margin: 6px 0 6px 20px;
+            padding: 0;
+        }
+        .bot-message li {
+            margin: 3px 0;
+            line-height: 1.55;
+        }
+        .bot-message code {
+            background: #eef2ff;
+            color: #3b4abf;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 12.5px;
+            font-family: 'Courier New', monospace;
+        }
+        .bot-message hr {
+            border: none;
+            border-top: 1px dashed #d0d0d0;
+            margin: 8px 0;
+        }
+        .bot-message table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12.5px;
+            margin: 8px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .bot-message th {
+            background: #e8f0fe;
+            color: #0051d5;
+            padding: 6px 10px;
+            text-align: left;
+            border: 1px solid #c5d5f5;
+            font-weight: 600;
+        }
+        .bot-message td {
+            padding: 5px 10px;
+            border: 1px solid #e8e8e8;
+            vertical-align: top;
+        }
+        .bot-message tr:nth-child(even) td {
+            background: #fafbff;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Image Search Styles - Sidebar Optimized */
+        .image-search-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f0f0f0;
+        }
+
+        .image-search-header {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .image-search-header h2 {
+            font-size: 18px;
+            color: #1d1d1f;
+            margin-bottom: 5px;
+        }
+
+        .image-search-header h2 i {
+            color: #007aff;
+            margin-right: 8px;
+        }
+
+        .image-search-header p {
+            color: #86868b;
+            font-size: 13px;
+        }
+
+        .image-search-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .upload-area {
+            width: 100%;
+        }
+
+        .upload-placeholder {
+            border: 2px dashed #d2d2d7;
+            border-radius: 12px;
+            padding: 30px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #f9f9f9;
+        }
+
+        .upload-placeholder:hover {
+            border-color: #007aff;
+            background-color: #f0f7ff;
+        }
+
+        .upload-placeholder i {
+            font-size: 32px;
+            color: #007aff;
+            margin-bottom: 10px;
+        }
+
+        .upload-placeholder p {
+            font-size: 14px;
+            color: #1d1d1f;
+            margin-bottom: 5px;
+        }
+
+        .upload-placeholder small {
+            font-size: 12px;
+        }
+
+        .image-preview {
+            border-radius: 12px;
+        }
+
+        .image-preview img {
+            max-height: 250px;
+        }
+
+        .btn-search-image {
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        .image-search-results {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .image-search-results h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .results-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .result-card {
+            display: flex;
+            align-items: center;
+            background-color: #fbfbfd;
+            border: 1px solid #eee;
+        }
+
+        .result-card img {
+            width: 80px;
+            height: 80px;
+            padding: 5px;
+        }
+
+        .result-card-info {
+            padding: 10px;
+            flex: 1;
+        }
+
+        .result-card-name {
+            font-size: 12px;
+            -webkit-line-clamp: 1;
+            line-clamp: 1;
+        }
+
+        .result-card-price {
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .result-card-similarity {
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
+        }
+
+        .similarity-bar {
+            flex: 1;
+            height: 4px;
+            background-color: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .similarity-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #34c759 0%, #007aff 100%);
+            transition: width 0.3s ease;
+        }
+
+        /* ========== PRICE RANGE SLIDER ========== */
+        .price-range-group {
+            width: 100%;
+            padding: 4px 0 2px;
+        }
+
+        .price-range-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .price-range-label .filter-label { margin-bottom: 0; }
+
+        .price-range-values {
+            font-size: 13px;
+            font-weight: 700;
+            color: #007aff;
+            white-space: nowrap;
+        }
+
+        .range-slider-wrap {
+            position: relative;
+            height: 24px;
+            display: flex;
+            align-items: center;
+        }
+
+        .range-track {
+            position: absolute;
+            left: 0; right: 0;
+            height: 4px;
+            background: #d2d2d7;
+            border-radius: 2px;
+            pointer-events: none;
+        }
+
+        .range-fill {
+            position: absolute;
+            height: 4px;
+            background: #007aff;
+            border-radius: 2px;
+            pointer-events: none;
+        }
+
+        .range-slider-wrap input[type="range"] {
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: transparent;
+            border: none;
+            outline: none;
+            pointer-events: none;
+            -webkit-appearance: none;
+            appearance: none;
+            padding: 0;
+        }
+
+        .range-slider-wrap input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            background: #007aff;
+            border: 2px solid white;
+            box-shadow: 0 1px 6px rgba(0,122,255,0.35);
+            cursor: pointer;
+            pointer-events: all;
+            transition: transform 0.15s;
+        }
+
+        .range-slider-wrap input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .range-slider-wrap input[type="range"]::-moz-range-thumb {
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            background: #007aff;
+            border: 2px solid white;
+            box-shadow: 0 1px 6px rgba(0,122,255,0.35);
+            cursor: pointer;
+            pointer-events: all;
+        }
+
+        /* ========== COMPARE FEATURE ========== */
+        .compare-toggle {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 2px solid #d2d2d7;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            color: #86868b;
+            transition: all 0.2s ease;
+            z-index: 2;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .compare-toggle:hover { border-color: #ff9500; color: #ff9500; }
+        .compare-toggle.active { border-color: #ff9500; background: #ff9500; color: white; }
+
+        /* Compare Bar */
+        .compare-bar {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: white;
+            border-top: 3px solid #ff9500;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            z-index: 9990;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.12);
+            transform: translateY(100%);
+            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        }
+        .compare-bar.visible { transform: translateY(0); }
+        .compare-bar-title {
+            font-weight: 700; color: #1d1d1f;
+            white-space: nowrap; font-size: 14px; min-width: 80px;
+        }
+        .compare-bar-items { display: flex; gap: 10px; flex: 1; }
+        .compare-bar-item {
+            display: flex; align-items: center; gap: 8px;
+            background: #f5f5f7; border-radius: 10px;
+            padding: 6px 10px; min-width: 160px; max-width: 220px;
+            border: 1px solid #e8e8ed;
+        }
+        .compare-bar-item img {
+            width: 38px; height: 38px; object-fit: contain;
+            background: white; border-radius: 6px; padding: 2px; flex-shrink: 0;
+        }
+        .compare-bar-item-info { flex: 1; overflow: hidden; }
+        .compare-bar-item-name {
+            font-size: 12px; font-weight: 600;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .compare-bar-item-price { font-size: 12px; color: #e60012; font-weight: 700; }
+        .compare-bar-item-remove {
+            background: none; border: none; color: #86868b;
+            cursor: pointer; font-size: 14px; padding: 2px; line-height: 1; flex-shrink: 0;
+        }
+        .compare-bar-item-remove:hover { color: #e60012; }
+        .compare-bar-slot {
+            min-width: 140px; height: 54px;
+            border: 2px dashed #d2d2d7; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; color: #86868b; gap: 4px;
+        }
+        .compare-bar-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+
+        /* Compare Modal */
+        .compare-modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 10000; display: none;
+            align-items: flex-start; justify-content: center;
+            padding: 30px 20px; overflow-y: auto;
+        }
+        .compare-modal-overlay.active { display: flex; }
+        .compare-modal {
+            background: white; border-radius: 20px;
+            width: 100%; max-width: 950px; margin: auto;
+            overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease;
+        }
+        .compare-modal-header {
+            background: linear-gradient(135deg, #ff9500 0%, #e67e00 100%);
+            color: white; padding: 18px 24px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .compare-modal-header h2 { font-size: 18px; font-weight: 700; }
+        .compare-modal-body { overflow-x: auto; padding: 24px; }
+        .compare-table {
+            width: 100%; border-collapse: collapse; min-width: 480px;
+        }
+        .compare-table th {
+            text-align: center; padding: 8px 12px 16px;
+            border-bottom: 2px solid #f0f0f0;
+            font-size: 13px; color: #86868b; font-weight: 600;
+        }
+        .compare-table th.label-col {
+            text-align: left; width: 130px;
+            color: #1d1d1f; background: #f9f9f9;
+        }
+        .compare-table td {
+            text-align: center; padding: 13px 12px;
+            border-bottom: 1px solid #f5f5f7;
+            font-size: 14px; vertical-align: middle;
+        }
+        .compare-table td.label-cell {
+            text-align: left; font-weight: 600;
+            color: #515154; font-size: 13px; background: #f9f9f9;
+        }
+        .compare-table .product-img-cell img {
+            width: 90px; height: 90px; object-fit: contain;
+        }
+        .compare-table .price-cell { color: #e60012; font-weight: 700; font-size: 16px; }
+        .compare-table .best-cell { background: #fff8e6; }
+        .best-badge {
+            display: inline-block; margin-top: 4px;
+            font-size: 11px; color: #34c759; font-weight: 700;
+        }
+        .compare-modal-footer {
+            padding: 16px 24px; border-top: 1px solid #f0f0f0;
+            display: flex; gap: 12px; justify-content: flex-end;
+        }
+        @media (max-width: 768px) {
+            .compare-bar { flex-wrap: wrap; padding: 10px 16px; }
+            .compare-bar-items { order: 2; width: 100%; }
+            .compare-bar-title { order: 1; }
+            .compare-bar-actions { order: 3; width: 100%; justify-content: flex-end; }
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           VISUAL REDESIGN — CSS Variables + overrides
+           ══════════════════════════════════════════════════════════ */
+        :root {
+            --pri:       #6366f1;
+            --pri-dark:  #4f46e5;
+            --pri-deep:  #3730a3;
+            --pri-light: #e0e7ff;
+            --accent:    #f43f5e;
+            --orange:    #f97316;
+            --green:     #10b981;
+            --yellow:    #f59e0b;
+            --bg:        #eef2ff;
+            --surface:   #ffffff;
+            --text-1:    #0f172a;
+            --text-2:    #64748b;
+            --border:    #e2e8f0;
+        }
+
+        *, *::before, *::after { font-family: 'Inter', 'Segoe UI', sans-serif; }
+
+        body { background: var(--bg); color: var(--text-1); }
+
+        /* ── Header ── */
+        header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 55%, #a855f7 100%);
+            padding: 44px 0 52px;
+            border-radius: 0 0 36px 36px;
+            box-shadow: 0 12px 40px rgba(79,70,229,0.4);
+            overflow: hidden;
+            position: relative;
+        }
+        header::before {
+            content: '';
+            position: absolute;
+            width: 420px; height: 420px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 50%;
+            top: -160px; right: -80px;
+            pointer-events: none;
+        }
+        header::after {
+            content: '';
+            position: absolute;
+            width: 260px; height: 260px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            bottom: -110px; left: 6%;
+            pointer-events: none;
+        }
+        h1 { font-size: 2.8rem; font-weight: 800; letter-spacing: -0.5px; }
+        .subtitle { font-size: 1.1rem; opacity: 0.88; }
+        .stat-item {
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.25);
+            font-weight: 600; font-size: 14px;
+        }
+
+        /* ── Layout ── */
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+
+        /* ── Filter bar ── */
+        .filters {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 18px 20px;
+            gap: 12px;
+            box-shadow: 0 2px 12px rgba(99,102,241,0.06);
+        }
+        .filter-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--text-2);
+            margin-bottom: 6px;
+        }
+        select, input[type="text"] {
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-1);
+            background: #fafbff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        select:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: var(--pri);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.14);
+            background: var(--surface);
+        }
+
+        /* ── Range slider accent ── */
+        .range-fill { background: linear-gradient(90deg, var(--pri), #a855f7); }
+        .range-slider-wrap input[type="range"]::-webkit-slider-thumb {
+            background: var(--pri);
+            box-shadow: 0 1px 8px rgba(99,102,241,0.45);
+        }
+        .range-slider-wrap input[type="range"]::-moz-range-thumb {
+            background: var(--pri);
+        }
+        .price-range-values { color: var(--pri); }
+
+        /* ── Product cards ── */
+        .products-grid { gap: 20px; }
+        .product-card {
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 12px rgba(15,23,42,0.06);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 18px 40px rgba(99,102,241,0.16);
+            border-color: rgba(99,102,241,0.35);
+        }
+        .product-image {
+            background: linear-gradient(145deg, #f5f7ff, #eef0ff);
+            border-radius: 20px 20px 0 0;
+            height: 200px;
+        }
+        .source-badge {
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            backdrop-filter: blur(6px);
+        }
+        /* Source-coded badge colors */
+        .badge-fptshop    { background: rgba(220,38,38,0.82); color:#fff; }
+        .badge-tgdd       { background: rgba(29,78,216,0.82); color:#fff; }
+        .badge-shopee     { background: rgba(234,88,12,0.9);  color:#fff; }
+        .badge-lazada     { background: rgba(99,102,241,0.88);color:#fff; }
+        .badge-hoangha    { background: rgba(5,150,105,0.85); color:#fff; }
+        .badge-cellphones { background: rgba(2,132,199,0.85); color:#fff; }
+        .badge-didongviet { background: rgba(168,85,247,0.85);color:#fff; }
+        .badge-default    { background: rgba(15,23,42,0.72);  color:#fff; }
+
+        .product-info { padding: 16px 18px; }
+        .product-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-1);
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+        .product-price {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--accent);
+            letter-spacing: -0.3px;
+            margin-bottom: 12px;
+        }
+        .product-meta {
+            font-size: 12px;
+            color: var(--text-2);
+            border-top-color: var(--border);
+            padding-top: 12px;
+        }
+        .stars { color: var(--yellow); }
+
+        /* ── Buttons ── */
+        .btn {
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 10px 14px;
+            letter-spacing: 0.1px;
+            transition: all 0.2s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--pri) 0%, var(--pri-dark) 100%);
+            color: #fff;
+            box-shadow: 0 3px 12px rgba(99,102,241,0.35);
+            border: none;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--pri-dark) 0%, var(--pri-deep) 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(99,102,241,0.4);
+        }
+        .btn-secondary {
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            color: var(--text-2);
+        }
+        .btn-secondary:hover {
+            background: var(--pri-light);
+            border-color: var(--pri);
+            color: var(--pri-dark);
+        }
+
+        /* ── Sidebar / Image search ── */
+        .image-search-section {
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 12px rgba(99,102,241,0.06);
+        }
+        .image-search-header h2 i { color: var(--pri); }
+        .upload-placeholder:hover {
+            border-color: var(--pri);
+            background: var(--pri-light);
+        }
+        .upload-placeholder i { color: var(--pri); }
+        .btn-search-image {
+            background: linear-gradient(135deg, var(--pri) 0%, var(--pri-dark) 100%);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 3px 12px rgba(99,102,241,0.3);
+        }
+        .btn-search-image:hover { opacity: 0.9; transform: translateY(-1px); }
+        .similarity-fill { background: linear-gradient(90deg, var(--green) 0%, var(--pri) 100%); }
+
+        /* ── Load spinner ── */
+        .load-more-spinner i { color: var(--pri); }
+
+        /* ── Chat widget ── */
+        .chat-button {
+            width: 56px; height: 56px; font-size: 22px;
+            background: linear-gradient(135deg, var(--pri) 0%, #7c3aed 100%);
+            box-shadow: 0 6px 22px rgba(99,102,241,0.5);
+        }
+        .chat-header { background: linear-gradient(135deg, var(--pri) 0%, var(--pri-dark) 100%); }
+
+        /* ── Compare feature re-skin ── */
+        .compare-toggle:hover { border-color: var(--orange); color: var(--orange); }
+        .compare-toggle.active { border-color: var(--orange); background: var(--orange); color: #fff; }
+        .compare-bar { border-top-color: var(--orange); }
+        #btn-compare-now { background: linear-gradient(135deg, var(--orange) 0%, #ea580c 100%) !important; }
+        .compare-modal-header { background: linear-gradient(135deg, var(--orange) 0%, #ea580c 100%); }
+
+        /* ── Compare modal table ── */
+        .compare-table .best-cell { background: #fff7ed; }
+        .best-badge { color: var(--green); }
+
+        /* ── Suggestion chips ── */
+        .suggestion-chip:hover { background: var(--pri); border-color: var(--pri); color: #fff; }
+
+        /* ── Page count label ── */
+        .products-count-label { color: var(--text-2); }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+        }
+    </style>
+
+    <!-- Font Awesome removed, using emoji instead -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>📱 So Sánh Giá Điện Thoại</h1>
+            <p class="subtitle"><span style="margin-right:6px;opacity:.8;">⚡</span>Tổng hợp giá từ Shopee, Lazada & nhiều cửa hàng uy tín</p>
+
+            <div class="stats-bar">
+                <div class="stat-item">📦 <span id="total-products">0</span> sản phẩm</div>
+                <div class="stat-item">🏪 <span id="total-stores">0</span> cửa hàng</div>
+                <div class="stat-item">💰 Từ <span id="min-price">0</span>đ</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-layout">
+            <!-- Sidebar with Image Search -->
+            <aside class="sidebar">
+                <div class="image-search-section" id="image-search-section">
+                    <div class="image-search-header">
+                        <h2>📸 Tìm theo ảnh</h2>
+                        <p><span style="margin-right:4px;color:#a855f7;font-size:11px;">✨</span>Upload ảnh để tìm sản phẩm tương tự</p>
+                    </div>
+
+                    <div class="image-search-content">
+                        <div class="upload-area" id="upload-area">
+                            <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                            <div class="upload-placeholder" onclick="document.getElementById('image-upload').click()">
+                                ☁️
+                                <p>Chọn ảnh hoặc kéo thả</p>
+                                <small>Hỗ trợ: JPG, PNG, WEBP</small>
+                            </div>
+                            <div class="image-preview" id="image-preview" style="display: none;">
+                                <img id="preview-img" src="" alt="Preview">
+                                <button type="button" class="remove-image" onclick="removeImage()">
+                                    ✕
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn-search-image" id="btn-search-image"
+                            onclick="searchByImage(event)" disabled>
+                            🔍 Tìm kiếm ngay
+                        </button>
+
+                        <div class="search-status" id="search-status"></div>
+                    </div>
+
+                    <div class="image-search-results" id="image-search-results" style="display: none;">
+                        <h3><span style="color:var(--yellow);margin-right:6px;">✨</span>Kết quả tìm kiếm</h3>
+                        <div class="results-grid" id="results-grid"></div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="content">
+                <div class="filters" id="filters-section">
+                    <div class="filter-group search-box">
+                        <label class="filter-label"><span style="margin-right:5px;">🔍</span>Tìm kiếm</label>
+                        <input type="text" id="search-input" placeholder="Nhập tên điện thoại...">
+                    </div>
+
+                    <div class="filter-group">
+                        <label class="filter-label"><span style="margin-right:5px;">📱</span>Hãng / Dòng máy</label>
+                        <select id="filter-type">
+                            <option value="all">Tất cả sản phẩm</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label class="filter-label"><span style="margin-right:5px;">💾</span>Dung lượng</label>
+                        <select id="filter-storage">
+                            <option value="all">Tất cả</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label class="filter-label"><span style="margin-right:5px;">🏪</span>Cửa hàng</label>
+                        <select id="filter-source">
+                            <option value="all">Tất cả</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label class="filter-label"><span style="margin-right:5px;">↕️</span>Sắp xếp</label>
+                        <select id="sort-by">
+                            <option value="random">🔀 Ngẫu nhiên</option>
+                            <option value="price-asc">↑ Giá: Thấp → Cao</option>
+                            <option value="price-desc">↓ Giá: Cao → Thấp</option>
+                            <option value="sold-desc">🔥 Bán chạy nhất</option>
+                            <option value="rating-desc">⭐ Đánh giá cao</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group price-range-group">
+                        <div class="price-range-label">
+                            <label class="filter-label"><span style="margin-right:5px;">🎚️</span>Khoảng giá</label>
+                            <span class="price-range-values" id="price-range-display">Tất cả</span>
+                        </div>
+                        <div class="range-slider-wrap">
+                            <div class="range-track"></div>
+                            <div class="range-fill" id="range-fill"></div>
+                            <input type="range" id="price-min-slider" min="0" max="100" value="0" step="1">
+                            <input type="range" id="price-max-slider" min="0" max="100" value="100" step="1">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="products-grid" id="products-container">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Đang tải dữ liệu sản phẩm...</p>
+                    </div>
+                </div>
+
+                <!-- Infinite Scroll Sentinel & Spinner -->
+                <div class="load-more-spinner" id="load-more-spinner">
+                    <div class="spinner"></div>
+                    <span>Đang tải thêm sản phẩm...</span>
+                </div>
+                <div class="products-count-label" id="products-count-label"></div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Compare Bar (fixed bottom) -->
+    <div class="compare-bar" id="compare-bar">
+        <div class="compare-bar-title">
+            <span style="color:#ff9500; margin-right:6px;">⚖️</span>So sánh
+        </div>
+        <div class="compare-bar-items" id="compare-bar-items"></div>
+        <div class="compare-bar-actions">
+            <button class="btn btn-secondary" style="padding:10px 16px; font-size:13px; flex:0;" onclick="clearCompare()">
+                🗑️ Xóa
+            </button>
+            <button class="btn btn-primary" id="btn-compare-now"
+                style="padding:10px 20px; font-size:13px; flex:0; background:#ff9500; border:none;"
+                onclick="openCompareModal()" disabled>
+                ⚖️ So sánh ngay
+            </button>
+        </div>
+    </div>
+
+    <!-- Compare Modal -->
+    <div class="compare-modal-overlay" id="compare-modal-overlay" onclick="handleModalOverlayClick(event)">
+        <div class="compare-modal">
+            <div class="compare-modal-header">
+                <h2><span style="margin-right:8px;">⚖️</span>So sánh sản phẩm</h2>
+                <span style="cursor:pointer; font-size:18px; opacity:0.85;">✕</span>
+            </div>
+            <div class="compare-modal-body" id="compare-modal-body"></div>
+            <div class="compare-modal-footer">
+                <button class="btn btn-secondary" onclick="closeCompareModal()" style="flex:0; padding:10px 20px;">Đóng</button>
+                <button class="btn btn-primary" onclick="askAICompare()" style="flex:0; padding:10px 20px;">
+                    🤖 Hỏi AI so sánh
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat expand overlay -->
+    <div class="chat-overlay" id="chat-overlay" onclick="toggleExpand()"></div>
+
+    <!-- Chatbot Widget Interface -->
+    <div class="chat-widget">
+        <div class="chat-window" id="chat-window">
+            <div class="chat-header">
+                <span><span style="margin-right: 8px;">💻</span>Trợ lý mua sắm AI</span>
+                <div style="display:flex; gap:12px; align-items:center;">
+                    <span title="Xóa hội thoại" style="cursor:pointer; opacity:0.7; font-size:14px;" onclick="resetChat()">🗑️</span>
+                    <span id="expand-icon" title="Phóng to" style="cursor:pointer; opacity:0.8; font-size:14px;" onclick="toggleExpand()">⛶</span>
+                    <span title="Đóng" style="cursor: pointer; opacity: 0.8;" onclick="toggleChat()">✕</span>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bot-message">
+                    Xin chào! 👋<br>Tôi là AI giúp so sánh giá điện thoại. Bạn muốn tìm dòng máy nào hay so sánh giá?
+                </div>
+            </div>
+
+            <div class="chat-suggestions">
+                <div class="suggestion-chip" onclick="sendSuggestion('Điện thoại giá rẻ nhất hiện tại là bao nhiêu?')">
+                    <span style="margin-right:4px;">💰</span>Rẻ nhất</div>
+                <div class="suggestion-chip" onclick="sendSuggestion('Samsung Galaxy S bao nhiêu tiền?')">
+                    <span style="margin-right:4px;">📱</span>Samsung</div>
+                <div class="suggestion-chip" onclick="sendSuggestion('iPhone giá tốt nhất là gì?')">
+                    <span style="margin-right:4px;">🍎</span>iPhone</div>
+                <div class="suggestion-chip" onclick="sendSuggestion('So sánh giá Shopee vs Lazada')">
+                    <span style="margin-right:4px;">⚖️</span>So sánh</div>
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chat-input" placeholder="Hỏi về điện thoại..."
+                    onkeypress="handleEnter(event)">
+                <button type="button" class="send-btn" onclick="sendMessage()">📤</button>
+            </div>
+        </div>
+
+        <button type="button" class="chat-button" onclick="toggleChat()">
+            💬
+        </button>
+    </div>
+
+    <script>
+        let allProducts = [];       // Giữ lại để các hàm helper có thể dùng
+        let currentPage = 1;
+        let totalPages = 1;
+        let isLoadingMore = false;
+        let currentFilters = { search: '', brand: 'all', storage: 'all', source: 'all', sort: 'random', price_min: 0, price_max: 0 };
+        let filterDebounce = null;
+        const PAGE_SIZE = 24;
+
+        // ── Price Range Slider ─────────────────────────────────────────────
+        let priceAbsMin = 0;
+        let priceAbsMax = 100000000;
+
+        function initPriceSlider(minPrice, maxPrice) {
+            priceAbsMin = minPrice;
+            priceAbsMax = maxPrice;
+
+            const sliderMin = document.getElementById('price-min-slider');
+            const sliderMax = document.getElementById('price-max-slider');
+
+            sliderMin.value = 0;
+            sliderMax.value = 100;
+            updateSliderUI();
+
+            sliderMin.addEventListener('input', () => {
+                if (+sliderMin.value >= +sliderMax.value) sliderMin.value = +sliderMax.value - 1;
+                updateSliderUI();
+                triggerPriceFilter();
+            });
+            sliderMax.addEventListener('input', () => {
+                if (+sliderMax.value <= +sliderMin.value) sliderMax.value = +sliderMin.value + 1;
+                updateSliderUI();
+                triggerPriceFilter();
+            });
+        }
+
+        function sliderToPrice(pct) {
+            return Math.round(priceAbsMin + (pct / 100) * (priceAbsMax - priceAbsMin));
+        }
+
+        function updateSliderUI() {
+            const pctMin = +document.getElementById('price-min-slider').value;
+            const pctMax = +document.getElementById('price-max-slider').value;
+            const fill = document.getElementById('range-fill');
+            fill.style.left  = pctMin + '%';
+            fill.style.width = (pctMax - pctMin) + '%';
+
+            const vMin = sliderToPrice(pctMin);
+            const vMax = sliderToPrice(pctMax);
+            const display = document.getElementById('price-range-display');
+            if (pctMin === 0 && pctMax === 100) {
+                display.textContent = 'Tất cả';
+                currentFilters.price_min = 0;
+                currentFilters.price_max = 0;
+            } else {
+                display.textContent = formatPrice(vMin) + 'đ – ' + formatPrice(vMax) + 'đ';
+                currentFilters.price_min = vMin;
+                currentFilters.price_max = vMax;
+            }
+        }
+
+        function triggerPriceFilter() {
+            clearTimeout(filterDebounce);
+            filterDebounce = setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                loadPage(1, true);
+            }, 350);
+        }
+
+        // ── Bootstrap: lấy meta + trang đầu ──
+        window.addEventListener('DOMContentLoaded', async function () {
+            await loadMeta();
+            await loadPage(1);
+        });
+
+        async function loadMeta() {
+            try {
+                const res = await fetch(`${API_URL}/api/products/meta`);
+                const meta = await res.json();
+
+                // Stats
+                document.getElementById('total-products').textContent = meta.total_products.toLocaleString();
+                document.getElementById('total-stores').textContent = meta.sources.length;
+
+                const prices = meta.min_price;
+                document.getElementById('min-price').textContent = formatPrice(prices);
+                initPriceSlider(meta.min_price, meta.max_price || 100000000);
+
+                // Populate brand filter
+                const typeSelect = document.getElementById('filter-type');
+                meta.brands.forEach(b => {
+                    const o = document.createElement('option');
+                    o.value = b; o.textContent = b;
+                    typeSelect.appendChild(o);
+                });
+
+                // Populate storage filter
+                const storageSelect = document.getElementById('filter-storage');
+                meta.storages.forEach(s => {
+                    const o = document.createElement('option');
+                    o.value = s; o.textContent = s;
+                    storageSelect.appendChild(o);
+                });
+
+                // Populate source filter
+                const sourceSelect = document.getElementById('filter-source');
+                meta.sources.forEach(s => {
+                    const o = document.createElement('option');
+                    o.value = s; o.textContent = getSourceName(s);
+                    sourceSelect.appendChild(o);
+                });
+
+                setupFilterEvents();
+            } catch (err) {
+                console.error('loadMeta error:', err);
+            }
+        }
+
+        async function loadPage(page, reset = true) {
+            if (isLoadingMore) return;
+            isLoadingMore = true;
+
+            const spinner = document.getElementById('load-more-spinner');
+            const countLabel = document.getElementById('products-count-label');
+            const container = document.getElementById('products-container');
+
+            if (reset) {
+                currentPage = 1;
+                container.innerHTML = '<div id="scroll-sentinel"></div>';
+                if (countLabel) countLabel.classList.remove('visible');
+            }
+
+            if (spinner) spinner.classList.add('visible');
+
+            const params = new URLSearchParams({
+                page,
+                page_size: PAGE_SIZE,
+                search: currentFilters.search,
+                brand: currentFilters.brand,
+                storage: currentFilters.storage,
+                source: currentFilters.source,
+                sort: currentFilters.sort,
+                price_min: currentFilters.price_min,
+                price_max: currentFilters.price_max,
+            });
+
+            try {
+                const res = await fetch(`${API_URL}/api/products?${params}`);
+                const data = await res.json();
+
+                totalPages = data.total_pages;
+                currentPage = data.page;
+
+                if (reset && data.items.length === 0) {
+                    container.innerHTML = `
+                        <div class="loading">
+                            🔍
+                            <p>Không tìm thấy sản phẩm nào phù hợp</p>
+                        </div>`;
+                    isLoadingMore = false;
+                    return;
+                }
+
+                const sentinel = document.getElementById('scroll-sentinel');
+                const fragment = document.createDocumentFragment();
+                data.items.forEach(product => {
+                    const temp = document.createElement('div');
+                    temp.innerHTML = createProductCard(product);
+                    if (temp.firstElementChild) fragment.appendChild(temp.firstElementChild);
+                });
+                container.insertBefore(fragment, sentinel);
+
+                if (countLabel) {
+                    countLabel.textContent = `Đã hiển thị ${Math.min(currentPage * PAGE_SIZE, data.total)} / ${data.total} sản phẩm`;
+                    countLabel.classList.add('visible');
+                }
+
+                // Setup infinite scroll nếu còn trang
+                if (currentPage < totalPages) {
+                    setupScrollObserver();
+                } else {
+                    if (document.scrollObserver) document.scrollObserver.disconnect();
+                    if (countLabel) countLabel.textContent = `Đã hiển thị tất cả ${data.total} sản phẩm`;
+                }
+
+            } catch (err) {
+                console.error('loadPage error:', err);
+                showError('Không thể tải dữ liệu: ' + err.message);
+            } finally {
+                if (spinner) spinner.classList.remove('visible');
+                isLoadingMore = false;
+            }
+        }
+
+        function setupScrollObserver() {
+            if (document.scrollObserver) document.scrollObserver.disconnect();
+            const sentinel = document.getElementById('scroll-sentinel');
+            if (!sentinel) return;
+            document.scrollObserver = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && !isLoadingMore && currentPage < totalPages) {
+                    loadPage(currentPage + 1, false);
+                }
+            }, { rootMargin: '200px' });
+            document.scrollObserver.observe(sentinel);
+        }
+
+        function setupFilterEvents() {
+            const triggerFilter = () => {
+                clearTimeout(filterDebounce);
+                filterDebounce = setTimeout(() => {
+                    currentFilters.search = document.getElementById('search-input').value.trim();
+                    currentFilters.brand = document.getElementById('filter-type').value;
+                    currentFilters.storage = document.getElementById('filter-storage').value;
+                    currentFilters.source = document.getElementById('filter-source').value;
+                    currentFilters.sort = document.getElementById('sort-by').value;
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    loadPage(1, true);
+                }, 300);
+            };
+
+            document.getElementById('search-input').addEventListener('input', triggerFilter);
+            document.getElementById('filter-type').addEventListener('change', triggerFilter);
+            document.getElementById('filter-storage').addEventListener('change', triggerFilter);
+            document.getElementById('filter-source').addEventListener('change', triggerFilter);
+            document.getElementById('sort-by').addEventListener('change', triggerFilter);
+        }
+
+        function getSourceBadgeClass(source) {
+            if (!source) return 'badge-default';
+            const s = source.toLowerCase();
+            if (s.includes('fpt'))       return 'badge-fptshop';
+            if (s.includes('thegioidi')) return 'badge-tgdd';
+            if (s.includes('shopee'))    return 'badge-shopee';
+            if (s.includes('lazada'))    return 'badge-lazada';
+            if (s.includes('hoangha'))   return 'badge-hoangha';
+            if (s.includes('cellphone')) return 'badge-cellphones';
+            if (s.includes('didong'))    return 'badge-didongviet';
+            return 'badge-default';
+        }
+
+        // Tạo card sản phẩm
+        function createProductCard(product) {
+            const sourceName = getSourceName(product.source);
+            const badgeClass = getSourceBadgeClass(product.source);
+            const priceFormatted = formatPrice(product.price);
+            const soldText = product.sold ? `<span style="color:#f97316;margin-right:4px;">🔥</span>Đã bán: <b>${formatSold(product.sold)}</b>` : '';
+
+            return `
+                <div class="product-card">
+                    <div class="product-image">
+                        <div class="source-badge ${badgeClass}">${sourceName}</div>
+                        <img src="${product.image || 'https://via.placeholder.com/200x200?text=No+Image'}"
+                             alt="${product.name}"
+                             onerror="this.src='https://via.placeholder.com/200x200?text=iPhone+17'">
+                        <button class="compare-toggle" title="Thêm vào so sánh"
+                            onclick="toggleCompare(this, '${encodeURIComponent(JSON.stringify(product))}')">
+                            ＋
+                        </button>
+                    </div>
+                    
+                    <div class="product-info">
+                        <h3 class="product-name">${product.name}</h3>
+                        <div class="product-price"><span style="font-size:14px;opacity:.7;margin-right:4px;">🏷️</span>${priceFormatted}đ</div>
+                        
+                        <div class="product-meta">
+                            ${product.star ? `
+                                <div class="product-rating">
+                                    <div class="stars">${getStarRating(product.star)}</div>
+                                    <span>${product.star.toFixed(1)}</span>
+                                </div>
+                            ` : ''}
+                            ${product.locate ? `
+                                <div class="product-location">
+                                    📍 ${product.locate}
+                                </div>
+                            ` : ''}
+                        </div>
+                        
+                        ${soldText ? `<div style="margin-top: 10px; font-size: 13px; color: #515154;">${soldText}</div>` : ''}
+                        
+                        <div class="product-actions">
+                            <a href="${product.Url || '#'}" target="_blank" class="btn btn-primary">
+                                🛒 Mua ngay
+                            </a>
+                            <button class="btn btn-secondary" onclick="showDetails(this)" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
+                                ℹ️ Chi tiết
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Các hàm hỗ trợ
+        function getSourceName(sourceCode) {
+            if (!sourceCode) return 'Không rõ';
+            const sourceMap = {
+                'fptshop': 'FPT Shop',
+                'thegioididong_17': 'Thế Giới Di Động',
+                'thegioididong': 'Thế Giới Di Động',
+                'hoanghamobile_17': 'Hoàng Hà Mobile',
+                'hoanghamobile': 'Hoàng Hà Mobile',
+                'lazada': 'Lazada',
+                'shopee': 'Shopee',
+                'cellphones': 'CellphoneS',
+                'didongviet': 'Di Động Việt',
+                'viettel': 'Viettel Store'
+            };
+            // Nếu không có trong map thì dùng source code nhưng format đẹp hơn
+            return sourceMap[sourceCode] || sourceCode.replace(/_/g, ' ');
+        }
+
+        function formatPrice(price) {
+            return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        function formatSold(sold) {
+            if (sold >= 1000) {
+                return (sold / 1000).toFixed(1).replace('.0', '') + 'k';
+            }
+            return sold.toString();
+        }
+
+        function getStarRating(rating) {
+            let stars = '';
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+
+            for (let i = 0; i < fullStars; i++) {
+                stars += '⭐';
+            }
+            if (hasHalfStar) {
+                stars += '⭐';
+            }
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '⭐';
+            }
+            return stars;
+        }
+
+        // Hiển thị chi tiết sản phẩm
+        function showDetails(button) {
+            const product = JSON.parse(button.getAttribute('data-product'));
+            alert(`Chi tiết sản phẩm:\n\nTên: ${product.name}\nGiá: ${formatPrice(product.price)}đ\nNguồn: ${getSourceName(product.source)}\nĐánh giá: ${product.star || 'N/A'} sao\nĐã bán: ${product.sold || 'N/A'}`);
+        }
+
+        function showError(message) {
+            document.getElementById('products-container').innerHTML = `
+                <div class="error-message">
+                    ⚠️
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+
+
+        // Chatbot Integration - Tích hợp không cần Server Python
+        function toggleChat() {
+            const chatWindow = document.getElementById('chat-window');
+            chatWindow.classList.toggle('active');
+
+            if (chatWindow.classList.contains('active')) {
+                document.getElementById('chat-input').focus();
+            } else {
+                // Khi đóng thì cũng thoát expanded
+                if (chatWindow.classList.contains('expanded')) toggleExpand();
+            }
+        }
+
+        function toggleExpand() {
+            const chatWindow = document.getElementById('chat-window');
+            const overlay    = document.getElementById('chat-overlay');
+            const icon       = document.getElementById('expand-icon');
+            const isExpanded = chatWindow.classList.contains('expanded');
+
+            if (isExpanded) {
+                chatWindow.classList.remove('expanded');
+                overlay.classList.remove('active');
+                icon.textContent = '⛶';
+                icon.title = 'Phóng to';
+                document.body.style.overflow = '';
+            } else {
+                chatWindow.classList.add('expanded');
+                overlay.classList.add('active');
+                icon.textContent = '⊡';
+                icon.title = 'Thu nhỏ';
+                document.body.style.overflow = 'hidden';
+                // Scroll tin nhắn xuống cuối
+                const msgs = document.getElementById('chat-messages');
+                msgs.scrollTop = msgs.scrollHeight;
+            }
+        }
+
+        function handleEnter(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendSuggestion(text) {
+            document.getElementById('chat-input').value = text;
+            sendMessage();
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            // 1. Hiển thị tin nhắn user
+            addMessage(message, 'user');
+            input.value = '';
+
+            // 2. Bot "suy nghĩ"
+            const thinkingId = addMessage('<span class="spinner" style="width:14px;height:14px;border-width:2px;vertical-align:middle;margin-right:6px;"></span> Vui lòng đợi giây lát...', 'bot', true);
+
+            try {
+                // 3. Gọi API Backend
+                const response = await fetch(`${API_URL}/api/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: message }),
+                    credentials: 'include'   // Cần để server session hoạt động
+                });
+
+                // Xóa tin nhắn waiting
+                const thinkingMsg = document.querySelector(`[data-msg-id="${thinkingId}"]`);
+                if (thinkingMsg) thinkingMsg.remove();
+
+                if (!response.ok) {
+                    addMessage("Xin lỗi, Server đang gặp sự cố.", 'bot');
+                    return;
+                }
+
+                const data = await response.json();
+
+                // 4. Hiển thị câu trả lời từ Gemini (render Markdown)
+                let html = `<div class="bot-answer">${markdownToHtml(data.answer)}</div>`;
+
+                // Thêm sản phẩm gợi ý nếu có (được trả về từ API)
+                if (data.related_products && data.related_products.length > 0) {
+                    html += '<div style="margin-top:10px; padding-top:10px; border-top:1px dashed #eee;">';
+                    html += '<small style="color:#888;">Sản phẩm tham khảo:</small>';
+                    data.related_products.forEach(p => {
+                        html += `
+                        <a href="${p.Url || '#'}" target="_blank" class="chat-product">
+                            <img src="${p.image || ''}" onerror="this.src='https://via.placeholder.com/50'"/>
+                            <div class="chat-product-info">
+                                <div class="chat-product-name">${p.name}</div>
+                                <div class="chat-product-price">${formatPrice(p.price)}đ</div>
+                            </div>
+                        </a>`;
+                    });
+                    html += '</div>';
+                }
+
+                addMessage(html, 'bot', true);
+
+            } catch (err) {
+                console.error(err);
+                const thinkingMsg = document.querySelector(`[data-msg-id="${thinkingId}"]`);
+                if (thinkingMsg) thinkingMsg.remove();
+                addMessage("⚠️ Mất kết nối tới Server Chatbot. Hãy kiểm tra xem file api_image_search.py có đang chạy không.", 'bot');
+            }
+        }
+
+        async function resetChat() {
+            try {
+                await fetch(`${API_URL}/api/chat/reset`, { method: 'POST', credentials: 'include' });
+            } catch (e) { /* server off - ignore */ }
+            const msgs = document.getElementById('chat-messages');
+            msgs.innerHTML = '<div class="message bot-message">Xin chào! 👋<br>Tôi là AI giúp so sánh giá điện thoại. Bạn muốn tìm dòng máy nào hay so sánh giá?</div>';
+        }
+
+        function markdownToHtml(md) {
+            function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+            function fmt(s) {
+                return esc(s)
+                    .replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>')
+                    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+                    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+                    .replace(/`([^`]+)`/g,'<code>$1</code>');
+            }
+            const lines = md.split('\n');
+            let out = '', inUl = false, inOl = false, tableRows = [];
+
+            function closeTable() {
+                if (!tableRows.length) return;
+                out += '<table>';
+                tableRows.forEach((r, i) => {
+                    const cols = r.split('|').map(c => c.trim()).filter(c => c !== '');
+                    if (i === 1 && cols.every(c => /^[-:]+$/.test(c))) return; // separator row
+                    const tag = i === 0 ? 'th' : 'td';
+                    out += '<tr>' + cols.map(c => `<${tag}>${fmt(c)}</${tag}>`).join('') + '</tr>';
+                });
+                out += '</table>';
+                tableRows = [];
+            }
+
+            lines.forEach(line => {
+                const trimmed = line.trim();
+                if (trimmed.startsWith('|')) {
+                    if (inUl) { out += '</ul>'; inUl = false; }
+                    if (inOl) { out += '</ol>'; inOl = false; }
+                    tableRows.push(trimmed);
+                    return;
+                }
+                if (tableRows.length) closeTable();
+                const hm = trimmed.match(/^(#{1,3}) (.+)$/);
+                if (hm) {
+                    if (inUl) { out += '</ul>'; inUl = false; }
+                    if (inOl) { out += '</ol>'; inOl = false; }
+                    out += `<h${hm[1].length}>${fmt(hm[2])}</h${hm[1].length}>`;
+                    return;
+                }
+                if (/^-{3,}$/.test(trimmed)) {
+                    if (inUl) { out += '</ul>'; inUl = false; }
+                    if (inOl) { out += '</ol>'; inOl = false; }
+                    out += '<hr>'; return;
+                }
+                const ul = trimmed.match(/^[-\*] (.+)$/);
+                if (ul) {
+                    if (inOl) { out += '</ol>'; inOl = false; }
+                    if (!inUl) { out += '<ul>'; inUl = true; }
+                    out += `<li>${fmt(ul[1])}</li>`; return;
+                }
+                const ol = trimmed.match(/^\d+\. (.+)$/);
+                if (ol) {
+                    if (inUl) { out += '</ul>'; inUl = false; }
+                    if (!inOl) { out += '<ol>'; inOl = true; }
+                    out += `<li>${fmt(ol[1])}</li>`; return;
+                }
+                if (inUl) { out += '</ul>'; inUl = false; }
+                if (inOl) { out += '</ol>'; inOl = false; }
+                if (trimmed === '') { out += '<br>'; return; }
+                out += `<p>${fmt(line)}</p>`;
+            });
+
+            if (inUl) out += '</ul>';
+            if (inOl) out += '</ol>';
+            if (tableRows.length) closeTable();
+            return out;
+        }
+
+        function addMessage(text, sender, isLoading = false) {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+
+            messageDiv.className = `message ${sender === 'user' ? 'user-message' : 'bot-message'}`;
+            messageDiv.innerHTML = text;
+
+            if (isLoading) {
+                const id = 'msg-' + Date.now();
+                messageDiv.setAttribute('data-msg-id', id);
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                return id;
+            }
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // ========== IMAGE SEARCH FUNCTIONS ==========
+        const API_URL = 'http://localhost:5001';
+        let selectedImageFile = null;
+
+        function initImageSearch() {
+            // Kiểm tra element tồn tại
+            const imageUpload = document.getElementById('image-upload');
+            const uploadArea = document.getElementById('upload-area');
+
+            if (!imageUpload || !uploadArea) {
+                console.warn('Image search elements not found');
+                return;
+            }
+
+            // Xử lý upload ảnh
+            imageUpload.addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    handleImageFile(file);
+                }
+            });
+
+            // Xử lý drag & drop
+            uploadArea.addEventListener('dragover', function (e) {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#007aff';
+            });
+
+            uploadArea.addEventListener('dragleave', function (e) {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#d2d2d7';
+            });
+
+            uploadArea.addEventListener('drop', function (e) {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#d2d2d7';
+
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    handleImageFile(file);
+                }
+            });
+        }
+
+        // Helper functions (phải ở ngoài để HTML có thể gọi)
+        function handleImageFile(file) {
+            selectedImageFile = file;
+
+            // Hiển thị preview
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('preview-img').src = e.target.result;
+                document.querySelector('.upload-placeholder').style.display = 'none';
+                document.getElementById('image-preview').style.display = 'block';
+                document.getElementById('btn-search-image').disabled = false;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeImage() {
+            selectedImageFile = null;
+            document.getElementById('preview-img').src = '';
+            document.querySelector('.upload-placeholder').style.display = 'block';
+            document.getElementById('image-preview').style.display = 'none';
+            document.getElementById('btn-search-image').disabled = true;
+            document.getElementById('image-search-results').style.display = 'none';
+            document.getElementById('search-status').textContent = '';
+            document.getElementById('search-status').className = 'search-status';
+        }
+
+        async function searchByImage(event) {
+            if (event) event.preventDefault();
+
+            if (!selectedImageFile) {
+                showSearchStatus('Vui lòng chọn ảnh trước!', 'error');
+                return;
+            }
+
+            showSearchStatus('Đang tìm kiếm...', 'loading');
+
+            try {
+                // Tạo FormData
+                const formData = new FormData();
+                formData.append('image', selectedImageFile);
+                formData.append('top_k', 6);
+
+                // Gọi API
+                const response = await fetch(`${API_URL}/api/search-by-image`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.success && data.results) {
+                    displaySearchResults(data.results);
+                    showSearchStatus(`Tìm thấy ${data.results.length} sản phẩm tương tự!`, 'success');
+                } else {
+                    throw new Error(data.error || 'Không có kết quả');
+                }
+
+            } catch (error) {
+                console.error('Search error:', error);
+                showSearchStatus('Lỗi: ' + error.message + '. Đảm bảo API đang chạy tại localhost:5001', 'error');
+            }
+        }
+
+        function showSearchStatus(message, type) {
+            const statusEl = document.getElementById('search-status');
+            statusEl.textContent = message;
+            statusEl.className = `search-status ${type}`;
+        }
+
+        function displaySearchResults(results) {
+            const resultsContainer = document.getElementById('results-grid');
+            const resultsSection = document.getElementById('image-search-results');
+
+            if (results.length === 0) {
+                resultsSection.style.display = 'none';
+                return;
+            }
+
+            resultsSection.style.display = 'block';
+
+            resultsContainer.innerHTML = results.map(result => {
+                const product = result.product;
+                const similarity = (result.similarity * 100).toFixed(1);
+
+                return `
+                    <div class="result-card" onclick="window.open('${product.Url || '#'}', '_blank')">
+                        <img src="${product.image}" alt="${product.name}" 
+                             onerror="this.src='https://via.placeholder.com/200x200?text=No+Image'">
+                        <div class="result-card-info">
+                            <div class="result-card-name">${product.name}</div>
+                            <div class="result-card-price">${formatPrice(product.price)}đ</div>
+                            <div class="result-card-similarity">
+                                <span>Độ tương đồng:</span>
+                                <div class="similarity-bar">
+                                    <div class="similarity-fill" style="width: ${similarity}%"></div>
+                                </div>
+                                <span>${similarity}%</span>
+                            </div>
+                            <div style="margin-top: 8px; font-size: 12px; color: #86868b;">
+                                🏪 ${getSourceName(product.source)}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Scroll đến kết quả
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // ========== COMPARE FEATURE ==========
+        let compareList = [];
+
+        function toggleCompare(btn, encodedProduct) {
+            const product = JSON.parse(decodeURIComponent(encodedProduct));
+            const idx = compareList.findIndex(p => p.name === product.name && p.source === product.source);
+
+            if (idx >= 0) {
+                compareList.splice(idx, 1);
+                btn.classList.remove('active');
+                btn.title = 'Thêm vào so sánh';
+                btn.innerHTML = '＋';
+            } else {
+                if (compareList.length >= 3) {
+                    const bar = document.getElementById('compare-bar');
+                    bar.style.outline = '3px solid #ff3b30';
+                    setTimeout(() => bar.style.outline = '', 600);
+                    return;
+                }
+                compareList.push(product);
+                btn.classList.add('active');
+                btn.title = 'Bỏ so sánh';
+                btn.innerHTML = '✓';
+            }
+            updateCompareBar();
+        }
+
+        function updateCompareBar() {
+            const bar = document.getElementById('compare-bar');
+            const itemsContainer = document.getElementById('compare-bar-items');
+            const btnCompare = document.getElementById('btn-compare-now');
+
+            if (compareList.length === 0) {
+                bar.classList.remove('visible');
+                return;
+            }
+            bar.classList.add('visible');
+            btnCompare.disabled = compareList.length < 2;
+            btnCompare.style.opacity = compareList.length < 2 ? '0.55' : '1';
+
+            let html = '';
+            for (let i = 0; i < 3; i++) {
+                if (compareList[i]) {
+                    const p = compareList[i];
+                    html += `
+                        <div class="compare-bar-item">
+                            <img src="${p.image || ''}" alt="${p.name}"
+                                 onerror="this.src='https://via.placeholder.com/40'">
+                            <div class="compare-bar-item-info">
+                                <div class="compare-bar-item-name">${p.name}</div>
+                                <div class="compare-bar-item-price">${formatPrice(p.price)}đ</div>
+                            </div>
+                            <button class="compare-bar-item-remove" onclick="removeFromCompare(${i})" title="Bỏ">
+                                ✕
+                            </button>
+                        </div>`;
+                } else {
+                    html += `<div class="compare-bar-slot">＋ Thêm sản phẩm</div>`;
+                }
+            }
+            itemsContainer.innerHTML = html;
+        }
+
+        function removeFromCompare(index) {
+            const product = compareList[index];
+            // Deactivate card button
+            document.querySelectorAll('.compare-toggle.active').forEach(btn => {
+                try {
+                    const p = JSON.parse(decodeURIComponent(btn.getAttribute('onclick').match(/'([^']+)'\)/)[1]));
+                    if (p.name === product.name && p.source === product.source) {
+                        btn.classList.remove('active');
+                        btn.title = 'Thêm vào so sánh';
+                        btn.innerHTML = '＋';
+                    }
+                } catch (e) {}
+            });
+            compareList.splice(index, 1);
+            updateCompareBar();
+        }
+
+        function clearCompare() {
+            compareList = [];
+            document.querySelectorAll('.compare-toggle.active').forEach(btn => {
+                btn.classList.remove('active');
+                btn.title = 'Thêm vào so sánh';
+                btn.innerHTML = '＋';
+            });
+            updateCompareBar();
+        }
+
+        function openCompareModal() {
+            if (compareList.length < 2) return;
+            const body = document.getElementById('compare-modal-body');
+
+            const prices = compareList.map(p => p.price);
+            const minPrice = Math.min(...prices);
+            const maxRating = Math.max(...compareList.map(p => parseFloat(p.star) || 0));
+            const maxSold = Math.max(...compareList.map(p => parseFloat(p.sold) || 0));
+
+            let html = '<table class="compare-table"><thead><tr><th class="label-col"></th>';
+            compareList.forEach(p => {
+                html += `<th>
+                    <div class="product-img-cell">
+                        <img src="${p.image || ''}" alt="${p.name}"
+                             onerror="this.src='https://via.placeholder.com/100'">
+                    </div>
+                    <div style="font-size:13px;font-weight:700;color:#1d1d1f;margin-top:8px;line-height:1.3;">${p.name}</div>
+                </th>`;
+            });
+            html += '</tr></thead><tbody>';
+
+            // Giá
+            html += '<tr><td class="label-cell"><span style="color:#e60012;margin-right:5px;">🏷️</span>Giá bán</td>';
+            compareList.forEach(p => {
+                const best = p.price === minPrice;
+                html += `<td class="price-cell${best ? ' best-cell' : ''}">
+                    ${formatPrice(p.price)}đ
+                    ${best ? '<br><span class="best-badge">✓ Rẻ nhất</span>' : ''}
+                </td>`;
+            });
+            html += '</tr>';
+
+            // Cửa hàng
+            html += '<tr><td class="label-cell"><span style="color:#007aff;margin-right:5px;">🏪</span>Cửa hàng</td>';
+            compareList.forEach(p => {
+                html += `<td>${getSourceName(p.source)}</td>`;
+            });
+            html += '</tr>';
+
+            // Đánh giá
+            html += '<tr><td class="label-cell"><span style="color:#ffb800;margin-right:5px;">⭐</span>Đánh giá</td>';
+            compareList.forEach(p => {
+                const r = parseFloat(p.star) || 0;
+                const best = r > 0 && r === maxRating;
+                html += `<td${best ? ' class="best-cell"' : ''}>
+                    ${r > 0 ? `<span class="stars">${getStarRating(r)}</span> <span>${r.toFixed(1)}</span>` : '<span style="color:#86868b">N/A</span>'}
+                    ${best ? '<br><span class="best-badge">✓ Cao nhất</span>' : ''}
+                </td>`;
+            });
+            html += '</tr>';
+
+            // Đã bán
+            html += '<tr><td class="label-cell"><span style="color:#5856d6;margin-right:5px;">🏪</span>Đã bán</td>';
+            compareList.forEach(p => {
+                const s = parseFloat(p.sold) || 0;
+                const best = s > 0 && s === maxSold;
+                html += `<td${best ? ' class="best-cell"' : ''}>
+                    ${s > 0 ? formatSold(s) : '<span style="color:#86868b">N/A</span>'}
+                    ${best ? '<br><span class="best-badge">✓ Bán chạy</span>' : ''}
+                </td>`;
+            });
+            html += '</tr>';
+
+            // Khu vực
+            html += '<tr><td class="label-cell"><span style="color:#ff3b30;margin-right:5px;">📍</span>Khu vực</td>';
+            compareList.forEach(p => {
+                html += `<td>${p.locate || '<span style="color:#86868b">N/A</span>'}</td>`;
+            });
+            html += '</tr>';
+
+            // Nút mua
+            html += '<tr><td class="label-cell"></td>';
+            compareList.forEach(p => {
+                html += `<td><a href="${p.Url || '#'}" target="_blank" class="btn btn-primary"
+                    style="display:inline-flex;padding:8px 14px;font-size:13px;">
+                    🏪&nbsp;Mua ngay
+                </a></td>`;
+            });
+            html += '</tr></tbody></table>';
+
+            body.innerHTML = html;
+            document.getElementById('compare-modal-overlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCompareModal() {
+            document.getElementById('compare-modal-overlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function handleModalOverlayClick(e) {
+            if (e.target === document.getElementById('compare-modal-overlay')) closeCompareModal();
+        }
+
+        function askAICompare() {
+            if (compareList.length < 2) return;
+            const names = compareList.map(p => p.name).join(' vs ');
+            const query = `So sánh chi tiết ${names}. Sản phẩm nào đáng mua hơn và tại sao?`;
+            closeCompareModal();
+            const chatWindow = document.getElementById('chat-window');
+            if (!chatWindow.classList.contains('active')) toggleChat();
+            setTimeout(() => {
+                document.getElementById('chat-input').value = query;
+                sendMessage();
+            }, 350);
+        }
+
+        // Khởi tạo image search khi DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initImageSearch);
+        } else {
+            initImageSearch();
+        }
+
+        // Kiểm tra API khi load trang
+        window.addEventListener('DOMContentLoaded', async function () {
+            try {
+                const response = await fetch(`${API_URL}/api/health`);
+                const data = await response.json();
+
+                if (data.status === 'ok' && data.embeddings_loaded) {
+                    console.log('✓ CLIP API đã sẵn sàng với', data.total_products, 'sản phẩm');
+                } else {
+                    console.warn('⚠ API chưa có embeddings. Chạy image_search_clip.py để tạo embeddings');
+                }
+            } catch (error) {
+                console.warn('⚠ Không kết nối được API. Chạy api_image_search.py để bật API');
+            }
+        });
+    </script>
+</body>
+
+</html>
